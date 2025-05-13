@@ -9,6 +9,34 @@ export interface Client {
   nextMeeting: string;
   comments: string;
   interventionStatus: 'Planned' | 'Completed' | 'Canceled';
+  documents?: ClientDocument[];
+  links?: ClientLink[];
+  notes?: ClientNote[];
+}
+
+export interface ClientDocument {
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  uploadedAt: string;
+}
+
+export interface ClientLink {
+  id: string;
+  name: string;
+  url: string;
+  date: string;
+  addedAt: string;
+}
+
+export interface ClientNote {
+  id: string;
+  text: string;
+  createdAt: string;
+  authorId: string;
+  authorName: string;
+  authorEmail: string;
 }
 
 export interface User {

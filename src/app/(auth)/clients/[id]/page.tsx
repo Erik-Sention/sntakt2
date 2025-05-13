@@ -3,8 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getClient, deleteClient } from '@/lib/clientService';
-import { Client } from '@/types';
+import { Client, ClientDocument, ClientLink, ClientNote } from '@/types';
 import Link from 'next/link';
+import DocumentUpload from '@/components/DocumentUpload';
+import DocumentList from '@/components/DocumentList';
+import LinkForm from '@/components/LinkForm';
+import LinkList from '@/components/LinkList';
+import NoteForm from '@/components/NoteForm';
+import NoteList from '@/components/NoteList';
+import { getClientDocuments } from '@/lib/documentService';
+import { getClientLinks } from '@/lib/linkService';
+import { getClientNotes } from '@/lib/noteService';
+import { useAuth } from '@/context/AuthContext';
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
   const [client, setClient] = useState<Client | null>(null);
@@ -12,15 +22,34 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [documents, setDocuments] = useState<ClientDocument[]>([]);
+  const [documentError, setDocumentError] = useState<string | null>(null);
+  const [links, setLinks] = useState<ClientLink[]>([]);
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const [notes, setNotes] = useState<ClientNote[]>([]);
+  const [noteError, setNoteError] = useState<string | null>(null);
   const router = useRouter();
   const { id } = params;
+  const { user } = useAuth();
 
   useEffect(() => {
-    const fetchClient = async () => {
+    const fetchClientData = async () => {
       try {
-        const data = await getClient(id);
-        if (data) {
-          setClient(data);
+        const clientData = await getClient(id);
+        if (clientData) {
+          setClient(clientData);
+          
+          // Hämta dokument
+          const clientDocuments = await getClientDocuments(id);
+          setDocuments(clientDocuments);
+          
+          // Hämta länkar
+          const clientLinks = await getClientLinks(id);
+          setLinks(clientLinks);
+          
+          // Hämta notat
+          const clientNotes = await getClientNotes(id);
+          setNotes(clientNotes);
         } else {
           setError('Klienten kunde inte hittas');
         }
@@ -32,7 +61,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       }
     };
 
-    fetchClient();
+    fetchClientData();
   }, [id]);
 
   const handleDelete = async () => {
@@ -47,13 +76,52 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     }
   };
 
+  const handleDocumentUploadComplete = (document: ClientDocument) => {
+    setDocuments(prevDocuments => [...prevDocuments, document]);
+    setDocumentError(null);
+  };
+
+  const handleDocumentUploadError = (error: Error) => {
+    setDocumentError(error.message);
+  };
+
+  const handleDocumentDeleted = (documentId: string) => {
+    setDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== documentId));
+  };
+  
+  const handleLinkAdded = (link: ClientLink) => {
+    setLinks(prevLinks => [...prevLinks, link]);
+    setLinkError(null);
+  };
+  
+  const handleLinkError = (error: Error) => {
+    setLinkError(error.message);
+  };
+  
+  const handleLinkDeleted = (linkId: string) => {
+    setLinks(prevLinks => prevLinks.filter(link => link.id !== linkId));
+  };
+  
+  const handleNoteAdded = (note: ClientNote) => {
+    setNotes(prevNotes => [note, ...prevNotes]); // Lägg till nya notat överst
+    setNoteError(null);
+  };
+  
+  const handleNoteError = (error: Error) => {
+    setNoteError(error.message);
+  };
+  
+  const handleNoteDeleted = (noteId: string) => {
+    setNotes(prevNotes => prevNotes.filter(note => note.id !== noteId));
+  };
+
   // Formatera datum för visning
   const formatDate = (dateString: string) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleDateString('sv-SE');
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-sm flex justify-center items-center min-h-[400px]">
         <div className="animate-pulse text-gray-600">Laddar klientinformation...</div>
@@ -148,6 +216,71 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <h3 className="text-sm font-medium text-gray-500">Nästa möte + Rapport</h3>
               <p className="mt-1 text-gray-900">{formatDate(client.nextMeeting)}</p>
             </div>
+          </div>
+        </div>
+        
+        <div className="p-6 border-b">
+          <h2 className="text-lg font-semibold mb-4">Notat</h2>
+          <NoteForm 
+            clientId={id} 
+            user={user}
+            onNoteAdded={handleNoteAdded} 
+            onError={handleNoteError} 
+          />
+          {noteError && (
+            <div className="mt-2 text-sm text-red-600">
+              {noteError}
+            </div>
+          )}
+          <div className="mt-6">
+            <NoteList 
+              clientId={id}
+              notes={notes} 
+              currentUser={user}
+              onNoteDeleted={handleNoteDeleted} 
+            />
+          </div>
+        </div>
+        
+        <div className="p-6 border-b">
+          <h2 className="text-lg font-semibold mb-4">Länkar</h2>
+          <LinkForm 
+            clientId={id} 
+            onLinkAdded={handleLinkAdded} 
+            onError={handleLinkError} 
+          />
+          {linkError && (
+            <div className="mt-2 text-sm text-red-600">
+              {linkError}
+            </div>
+          )}
+          <div className="mt-4">
+            <LinkList 
+              clientId={id}
+              links={links} 
+              onLinkDeleted={handleLinkDeleted} 
+            />
+          </div>
+        </div>
+
+        <div className="p-6 border-b">
+          <h2 className="text-lg font-semibold mb-4">Dokument (EJ Aktiverat ännu)</h2>
+          <DocumentUpload 
+            clientId={id} 
+            onUploadComplete={handleDocumentUploadComplete} 
+            onUploadError={handleDocumentUploadError} 
+          />
+          {documentError && (
+            <div className="mt-2 text-sm text-red-600">
+              {documentError}
+            </div>
+          )}
+          <div className="mt-4">
+            <DocumentList 
+              clientId={id}
+              documents={documents} 
+              onDocumentDeleted={handleDocumentDeleted} 
+            />
           </div>
         </div>
 

@@ -9,6 +9,7 @@ export default function Navigation() {
   const { user, signOut } = useAuth();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -65,13 +66,57 @@ export default function Navigation() {
               </Link>
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <button
-              onClick={handleSignOut}
-              className="luxury-button flex items-center"
-            >
-              <span>Logga ut</span>
-            </button>
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <div className="relative">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center text-luxury-dark focus:outline-none"
+              >
+                <span className="mr-2 text-sm">{user.displayName || user.email.split('@')[0]}</span>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5" 
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                    clipRule="evenodd" 
+                  />
+                </svg>
+              </button>
+              
+              {showUserMenu && (
+                <div 
+                  className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="user-menu"
+                >
+                  <div className="py-1" role="none">
+                    <Link
+                      href="/profile"
+                      className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${isActive('/profile') ? 'bg-gray-100' : ''}`}
+                      role="menuitem"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      Min profil
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setShowUserMenu(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Logga ut
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button
@@ -125,6 +170,16 @@ export default function Navigation() {
               }`}
             >
               Kalender
+            </Link>
+            <Link
+              href="/profile"
+              className={`block px-3 py-2 text-base font-medium border-l-2 ${
+                isActive('/profile')
+                  ? 'border-luxury-gold bg-luxury-sand/20 text-luxury-dark'
+                  : 'border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark'
+              }`}
+            >
+              Min profil
             </Link>
             <button
               onClick={handleSignOut}
