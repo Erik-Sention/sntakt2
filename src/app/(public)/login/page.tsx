@@ -48,7 +48,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="px-8 py-10 bg-glass rounded-2xl shadow-2xl animate-glow">
           <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-white text-glow mb-2">Sntakt</h1>
+            <h1 className="text-4xl font-bold text-white text-glow mb-2">Sention + Aktivitus Klientportal</h1>
             <p className="text-gray-300">Logga in för att fortsätta</p>
           </div>
           
