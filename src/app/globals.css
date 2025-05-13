@@ -3,23 +3,29 @@
 @tailwind utilities;
 
 :root {
-  --background: #080b12;
-  --foreground: #f2f5f9;
-  --primary-glow: conic-gradient(
-    from 180deg at 50% 50%,
-    #192a69 0deg,
-    #2a4fe9 55deg,
-    #4e36c2 120deg,
-    #3a52ff 160deg,
-    transparent 360deg
+  /* Quiet Luxury färgschema */
+  --sand: #F7E6CA;
+  --gold: #E8D59E;
+  --rosegold: #D9BBB0;
+  --taupe: #AD9C8E;
+  
+  --text-primary: #3A3A3A;
+  --text-secondary: #6A6A6A;
+  --text-accent: #8A6F5C;
+  
+  --primary-glow: radial-gradient(
+    circle,
+    rgba(232, 213, 158, 0.6) 0%,
+    rgba(217, 187, 176, 0.3) 50%,
+    rgba(173, 156, 142, 0.1) 100%
   );
-  --secondary-glow: radial-gradient(
-    rgba(51, 65, 119, 0.4),
-    rgba(65, 56, 158, 0.15)
-  );
-}
-
-@theme inline {
+  
+  --card-blur: blur(20px);
+  --card-border: 1px solid rgba(255, 255, 255, 0.15);
+  --card-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    0 8px 32px rgba(0, 0, 0, 0.05);
+    
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -28,43 +34,162 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #080b12;
-    --foreground: #f2f5f9;
+    --text-primary: #F0F0F0;
+    --text-secondary: #DADADA;
+    --text-accent: #E8D59E;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
 }
 
-/* Lägg till animationer och high-tech effekter */
-@layer utilities {
-  .animate-glow {
-    animation: glow 4s ease-in-out infinite alternate;
-  }
-  
-  .bg-glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .text-glow {
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 
-                 0 0 20px rgba(59, 130, 246, 0.3);
-  }
+/* Animationer */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes glow {
-  0% {
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3), 
-                0 0 20px rgba(59, 130, 246, 0.1);
+  0%, 100% { box-shadow: 0 0 5px rgba(232, 213, 158, 0.5); }
+  50% { box-shadow: 0 0 15px rgba(232, 213, 158, 0.8); }
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Moderna komponenter */
+@layer components {
+  .luxury-card {
+    @apply relative bg-opacity-80 backdrop-blur-lg rounded-xl p-6 border border-solid border-opacity-20 transition-all duration-300 shadow-lg;
+    background: linear-gradient(to right bottom, rgba(247, 230, 202, 0.2), rgba(173, 156, 142, 0.05));
+    border-color: rgba(232, 213, 158, 0.3);
   }
-  100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 
-                0 0 30px rgba(59, 130, 246, 0.3), 
-                0 0 40px rgba(59, 130, 246, 0.1);
+  
+  .luxury-button {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-medium transition-all duration-300;
+    background: linear-gradient(to right, var(--gold), var(--rosegold));
+    color: var(--text-primary);
+    box-shadow: 0 4px 10px rgba(173, 156, 142, 0.3);
   }
+  
+  .luxury-button:hover {
+    box-shadow: 0 6px 15px rgba(173, 156, 142, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .luxury-input {
+    @apply bg-opacity-10 backdrop-blur-sm border border-solid border-opacity-30 rounded-lg px-4 py-3 w-full transition-all duration-200;
+    background-color: rgba(247, 230, 202, 0.05);
+    border-color: rgba(173, 156, 142, 0.2);
+  }
+  
+  .luxury-input:focus {
+    @apply outline-none;
+    border-color: rgba(232, 213, 158, 0.6);
+    box-shadow: 0 0 0 2px rgba(232, 213, 158, 0.1);
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in {
+    opacity: 0;
+    animation: slideIn 0.6s ease-out forwards;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(to right, var(--gold), var(--taupe));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .animated-border {
+    position: relative;
+    z-index: 0;
+  }
+  
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -1px;
+    background: linear-gradient(90deg, var(--gold), var(--rosegold), var(--taupe), var(--gold));
+    background-size: 300% 100%;
+    border-radius: inherit;
+    animation: borderFlow 4s linear infinite;
+  }
+}
+
+/* Moderna calendar styling */
+.calendar-container {
+  @apply rounded-xl overflow-hidden;
+  background: linear-gradient(to right bottom, rgba(247, 230, 202, 0.08), rgba(173, 156, 142, 0.02));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 213, 158, 0.15);
+}
+
+.calendar-header {
+  @apply p-4 flex justify-between items-center;
+  background: linear-gradient(to right, rgba(232, 213, 158, 0.2), rgba(217, 187, 176, 0.1));
+}
+
+.calendar-day {
+  @apply p-2 relative transition-all duration-200;
+  min-height: 100px;
+}
+
+.calendar-day.today {
+  @apply rounded-md;
+  background: rgba(232, 213, 158, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(232, 213, 158, 0.4);
+}
+
+.calendar-day:hover {
+  background: rgba(217, 187, 176, 0.1);
+}
+
+.calendar-event {
+  @apply rounded-md p-1 text-xs mb-1 truncate border-l-2 text-left;
+  background: rgba(247, 230, 202, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.calendar-event.primary {
+  border-color: var(--gold);
+  background: rgba(232, 213, 158, 0.2);
+}
+
+.calendar-event.secondary {
+  border-color: var(--rosegold);
+  background: rgba(217, 187, 176, 0.2);
+}
+
+.calendar-event.accent {
+  border-color: var(--taupe);
+  background: rgba(173, 156, 142, 0.2);
 }

@@ -23,42 +23,42 @@ export default function Navigation() {
   if (!user) return null;
 
   return (
-    <nav className="bg-glass backdrop-blur-lg border-b border-white/10 relative z-20">
+    <nav className="backdrop-blur-md border-b border-luxury-gold/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold text-blue-400 text-glow hover:text-blue-300 transition-colors">
-                Sntakt
+              <Link href="/dashboard" className="text-2xl font-light tracking-wide text-luxury-dark hover:text-luxury-taupe transition-colors duration-300">
+                <span className="gradient-text font-medium">Sntakt</span>
               </Link>
             </div>
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
+            <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
               <Link 
                 href="/dashboard" 
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all ${
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                   isActive('/dashboard')
-                    ? 'border-blue-500 text-blue-100 text-glow'
-                    : 'border-transparent text-gray-300 hover:border-blue-400/50 hover:text-blue-200'
+                    ? 'border-luxury-gold text-luxury-dark'
+                    : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
                 }`}
               >
                 Översikt
               </Link>
               <Link 
                 href="/clients" 
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all ${
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                   isActive('/clients')
-                    ? 'border-blue-500 text-blue-100 text-glow'
-                    : 'border-transparent text-gray-300 hover:border-blue-400/50 hover:text-blue-200'
+                    ? 'border-luxury-gold text-luxury-dark'
+                    : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
                 }`}
               >
                 Klienter
               </Link>
               <Link 
                 href="/calendar" 
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all ${
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                   isActive('/calendar')
-                    ? 'border-blue-500 text-blue-100 text-glow'
-                    : 'border-transparent text-gray-300 hover:border-blue-400/50 hover:text-blue-200'
+                    ? 'border-luxury-gold text-luxury-dark'
+                    : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
                 }`}
               >
                 Kalender
@@ -68,28 +68,24 @@ export default function Navigation() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <button
               onClick={handleSignOut}
-              className="relative group px-4 py-2 rounded-md overflow-hidden"
+              className="luxury-button flex items-center"
             >
-              <span className="relative z-10 text-sm font-medium text-white group-hover:text-white transition-colors">
-                Logga ut
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-80 group-hover:opacity-100 transition-opacity"></span>
-              <span className="absolute inset-0 group-hover:blur-sm bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 opacity-0 group-hover:opacity-70 transition-opacity"></span>
+              <span>Logga ut</span>
             </button>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800/30 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
+              className="inline-flex items-center justify-center p-2 rounded-md text-luxury-mid hover:text-luxury-dark hover:bg-luxury-sand/30 transition-colors duration-300"
             >
               <span className="sr-only">Öppna huvudmenyn</span>
               {isMenuOpen ? (
                 <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
                 <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
             </button>
@@ -98,14 +94,14 @@ export default function Navigation() {
       </div>
 
       {isMenuOpen && (
-        <div className="sm:hidden bg-gray-900/80 backdrop-blur-md border-t border-white/5">
+        <div className="sm:hidden bg-white/60 backdrop-blur-md border-t border-luxury-gold/10">
           <div className="pt-2 pb-3 space-y-1">
             <Link
               href="/dashboard"
               className={`block px-3 py-2 text-base font-medium border-l-2 ${
                 isActive('/dashboard')
-                  ? 'bg-blue-900/30 border-blue-500 text-blue-200'
-                  : 'border-transparent text-gray-300 hover:bg-gray-800/30 hover:border-blue-400/50 hover:text-blue-200'
+                  ? 'border-luxury-gold bg-luxury-sand/20 text-luxury-dark'
+                  : 'border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark'
               }`}
             >
               Översikt
@@ -114,8 +110,8 @@ export default function Navigation() {
               href="/clients"
               className={`block px-3 py-2 text-base font-medium border-l-2 ${
                 isActive('/clients')
-                  ? 'bg-blue-900/30 border-blue-500 text-blue-200'
-                  : 'border-transparent text-gray-300 hover:bg-gray-800/30 hover:border-blue-400/50 hover:text-blue-200'
+                  ? 'border-luxury-gold bg-luxury-sand/20 text-luxury-dark'
+                  : 'border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark'
               }`}
             >
               Klienter
@@ -124,15 +120,15 @@ export default function Navigation() {
               href="/calendar"
               className={`block px-3 py-2 text-base font-medium border-l-2 ${
                 isActive('/calendar')
-                  ? 'bg-blue-900/30 border-blue-500 text-blue-200'
-                  : 'border-transparent text-gray-300 hover:bg-gray-800/30 hover:border-blue-400/50 hover:text-blue-200'
+                  ? 'border-luxury-gold bg-luxury-sand/20 text-luxury-dark'
+                  : 'border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark'
               }`}
             >
               Kalender
             </Link>
             <button
               onClick={handleSignOut}
-              className="block w-full text-left px-3 py-2 text-base font-medium border-l-2 border-transparent text-gray-300 hover:bg-gray-800/30 hover:border-blue-400/50 hover:text-blue-200"
+              className="w-full text-left flex items-center px-3 py-2 text-base font-medium border-l-2 border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark"
             >
               Logga ut
             </button>
