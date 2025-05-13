@@ -18,8 +18,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-pulse text-gray-600">Laddar...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 text-white">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 relative">
+            <div className="absolute inset-0 rounded-full border-t-2 border-blue-500 animate-spin"></div>
+            <div className="absolute inset-3 rounded-full border-2 border-blue-400/30"></div>
+          </div>
+          <div className="mt-4 text-blue-300">Laddar...</div>
+        </div>
       </div>
     );
   }
@@ -29,9 +35,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 text-white">
       <Navigation />
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 relative z-10">
         {children}
       </main>
     </div>

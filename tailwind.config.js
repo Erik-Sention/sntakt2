@@ -24,6 +24,9 @@ module.exports = {
       transitionProperty: {
         'border': 'border-color, border-width, border-opacity',
       },
+      backgroundImage: {
+        'grid-pattern': "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 0V20M0 1H20' stroke='%23FFFFFF' stroke-opacity='0.05'/%3E%3C/svg%3E%0A\")",
+      },
     },
   },
   plugins: [],
