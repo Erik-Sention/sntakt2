@@ -6,8 +6,13 @@ import { AuthProvider } from '@/context/AuthContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Sntakt - Klienthanteringssystem',
+  title: 'Sention + Aktivitus Klientportal',
   description: 'Ett modernt system för hantering av klienter och deras kontakter',
+  icons: {
+    icon: '/sa-logo.svg',
+    shortcut: '/sa-logo.svg',
+    apple: '/sa-logo.svg',
+  }
 }
 
 export default function RootLayout({

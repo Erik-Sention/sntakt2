@@ -55,7 +55,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <div className="animate-slide-in" style={{ animationDelay: '0.1s' }}>
-        <h1 className="text-3xl font-light text-luxury-dark mb-2">Välkommen till <span className="gradient-text font-medium">Sntakt</span></h1>
+        <h1 className="text-3xl font-light text-luxury-dark mb-2">Välkommen till <span className="gradient-text font-medium">Sention + Aktivitus Klientportal</span></h1>
         <p className="text-luxury-mid text-lg">Hantera dina klienter och kontakter</p>
       </div>
 

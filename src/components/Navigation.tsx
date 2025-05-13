@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import AppIcon from './AppIcon';
 
 export default function Navigation() {
   const { user, signOut } = useAuth();
@@ -29,8 +30,9 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/dashboard" className="text-2xl font-light tracking-wide text-luxury-dark hover:text-luxury-taupe transition-colors duration-300">
-                <span className="gradient-text font-medium">Sntakt</span>
+              <Link href="/dashboard" className="flex items-center text-2xl font-light tracking-wide text-luxury-dark hover:text-luxury-taupe transition-colors duration-300">
+                <AppIcon size={28} className="mr-2" />
+                <span className="gradient-text font-medium">Sention + Aktivitus</span>
               </Link>
             </div>
             <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
