@@ -34,6 +34,7 @@ export interface ClientNote {
   id: string;
   text: string;
   createdAt: string;
+  performedAt: string;
   authorId: string;
   authorName: string;
   authorEmail: string;

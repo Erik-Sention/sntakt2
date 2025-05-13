@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ClientNote, User } from '@/types';
 import { deleteClientNote } from '@/lib/noteService';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 interface NoteListProps {
   clientId: string;
@@ -10,30 +11,42 @@ interface NoteListProps {
 }
 
 export default function NoteList({ clientId, notes, currentUser, onNoteDeleted }: NoteListProps) {
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState<ClientNote | null>(null);
 
-  const handleDelete = async (noteId: string) => {
+  const handleDeleteClick = (note: ClientNote) => {
+    setNoteToDelete(note);
+    setShowDeleteModal(true);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setNoteToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!noteToDelete) return;
+    
     try {
-      setDeletingId(noteId);
-      await deleteClientNote(clientId, noteId);
-      onNoteDeleted(noteId);
+      await deleteClientNote(clientId, noteToDelete.id, currentUser.uid);
+      onNoteDeleted(noteToDelete.id);
+      setShowDeleteModal(false);
+      setNoteToDelete(null);
     } catch (error) {
       console.error('Fel vid borttagning av notat:', error);
-    } finally {
-      setDeletingId(null);
+      // Felhantering görs i DeleteConfirmationModal
     }
   };
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
     
+    // Formatera endast datum, utan tid
     const date = new Date(dateString);
     return date.toLocaleDateString('sv-SE', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: 'numeric'
     });
   };
 
@@ -51,45 +64,26 @@ export default function NoteList({ clientId, notes, currentUser, onNoteDeleted }
   }
 
   return (
-    <div className="space-y-4">
-      {notes.map((note) => (
-        <div 
-          key={note.id} 
-          className="p-4 bg-white border rounded-lg shadow-sm"
-        >
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-900">{note.authorName}</span>
-              <span className="text-xs text-gray-500">{note.authorEmail}</span>
-            </div>
-            {isAuthor(note) && (
-              <button
-                onClick={() => handleDelete(note.id)}
-                disabled={deletingId === note.id}
-                className="text-gray-500 hover:text-red-500 focus:outline-none disabled:opacity-50"
-              >
-                {deletingId === note.id ? (
-                  <svg 
-                    className="animate-spin h-5 w-5" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24"
-                  >
-                    <circle 
-                      className="opacity-25" 
-                      cx="12" 
-                      cy="12" 
-                      r="10" 
-                      stroke="currentColor" 
-                      strokeWidth="4"
-                    ></circle>
-                    <path 
-                      className="opacity-75" 
-                      fill="currentColor" 
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
+    <>
+      <div className="mb-4 text-sm text-gray-700">
+        <p>Sorterat efter händelsedatum (nyaste först)</p>
+      </div>
+      <div className="space-y-4">
+        {notes.map((note) => (
+          <div 
+            key={note.id} 
+            className="p-4 bg-white border rounded-lg shadow-sm"
+          >
+            <div className="flex justify-between items-start">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium text-gray-900">{note.authorName}</span>
+                <span className="text-xs text-gray-500">{note.authorEmail}</span>
+              </div>
+              {isAuthor(note) && (
+                <button
+                  onClick={() => handleDeleteClick(note)}
+                  className="text-gray-500 hover:text-red-500 focus:outline-none disabled:opacity-50"
+                >
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     className="h-5 w-5" 
@@ -102,20 +96,36 @@ export default function NoteList({ clientId, notes, currentUser, onNoteDeleted }
                       clipRule="evenodd" 
                     />
                   </svg>
-                )}
-              </button>
-            )}
+                </button>
+              )}
+            </div>
+            <div className="mt-2">
+              <p className="text-sm text-gray-900 whitespace-pre-line">
+                {note.text}
+              </p>
+            </div>
+            <div className="mt-2 flex flex-col sm:flex-row sm:items-center text-xs text-gray-500 space-y-1 sm:space-y-0 sm:space-x-4">
+              <span>
+                <span className="font-medium">Datum:</span> {formatDate(note.performedAt)}
+              </span>
+              <span>
+                <span className="font-medium">Skapat:</span> {formatDate(note.createdAt)}
+              </span>
+            </div>
           </div>
-          <div className="mt-2">
-            <p className="text-sm text-gray-900 whitespace-pre-line">
-              {note.text}
-            </p>
-          </div>
-          <div className="mt-2 text-xs text-gray-500">
-            {formatDate(note.createdAt)}
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
+      {noteToDelete && (
+        <DeleteConfirmationModal
+          title="Ta bort notat"
+          message={`Är du säker på att du vill ta bort detta notat? Denna åtgärd kan inte ångras.`}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          isOpen={showDeleteModal}
+          requireAuth={true}
+        />
+      )}
+    </>
   );
 } 

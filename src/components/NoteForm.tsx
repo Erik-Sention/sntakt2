@@ -12,7 +12,11 @@ interface NoteFormProps {
 
 export default function NoteForm({ clientId, user, onNoteAdded, onError }: NoteFormProps) {
   const [text, setText] = useState('');
+  const [performedDate, setPerformedDate] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Format dagens datum (YYYY-MM-DD) för defaultvärde
+  const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +28,24 @@ export default function NoteForm({ clientId, user, onNoteAdded, onError }: NoteF
 
     setIsSubmitting(true);
     try {
-      const newNote = await addClientNote(clientId, text, user);
+      let performedAt;
+      
+      if (performedDate) {
+        // Om vi har ett datum, använd det med standardtid 12:00
+        performedAt = `${performedDate}T12:00:00`;
+      } else {
+        // Om inget datum valdes, använd aktuellt datum med standardtid 12:00
+        const now = new Date();
+        now.setHours(12, 0, 0, 0);
+        performedAt = now.toISOString();
+      }
+
+      const newNote = await addClientNote(clientId, text, performedAt, user);
       onNoteAdded(newNote);
       
       // Rensa formuläret
       setText('');
+      // Behåll datum
     } catch (error) {
       onError(error instanceof Error ? error : new Error('Fel vid tillägg av notat'));
     } finally {
@@ -57,6 +74,25 @@ export default function NoteForm({ clientId, user, onNoteAdded, onError }: NoteF
           />
         </div>
       </div>
+      
+      <div>
+        <label htmlFor="performedDate" className="block text-sm font-medium text-gray-700">
+          Datum för händelsen
+        </label>
+        <input
+          type="date"
+          id="performedDate"
+          value={performedDate}
+          onChange={(e) => setPerformedDate(e.target.value)}
+          max={today}
+          className="mt-1 block w-full sm:w-1/2 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+          disabled={isSubmitting}
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          Lämna tomt om händelsen skedde idag
+        </p>
+      </div>
+      
       <div className="flex justify-between items-center">
         <div className="text-xs text-gray-500 flex items-center">
           Signeras som: <span className="font-medium ml-1">{displayName}</span>
