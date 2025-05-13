@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sntakt - Klienthanteringssystem
 
-## Getting Started
+Ett modernt klienthanteringssystem byggt med Next.js, Firebase och Tailwind CSS.
 
-First, run the development server:
+## Funktioner
+
+- Hantera klienter och deras kontaktuppgifter
+- Spåra bokade tider och möten
+- Visa klienter i både lista och kalendervy
+- Användarautentisering med Firebase Auth
+- Datalagring med Firebase Realtime Database
+- Responsiv design som fungerar på alla enheter
+
+## Installation
+
+1. Klona detta repository
+2. Installera beroenden:
+
+```bash
+npm install
+```
+
+3. Skapa en `.env.local` fil i rotkatalogen och fyll i dina Firebase-uppgifter:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+NEXT_PUBLIC_FIREBASE_DATABASE_URL=your-database-url
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+```
+
+4. Starta utvecklingsmiljön:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Öppna [http://localhost:3000](http://localhost:3000) i din webbläsare.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment på Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Skapa ett konto på [Vercel](https://vercel.com) om du inte redan har ett.
+2. Koppla ditt GitHub-konto till Vercel.
+3. Importera ditt projekt.
+4. Lägg till ovanstående miljövariabler i Vercel-projektets inställningar.
+5. Klicka på "Deploy" för att publicera din app.
 
-## Learn More
+## Firebase-konfiguration
 
-To learn more about Next.js, take a look at the following resources:
+1. Skapa ett nytt projekt i [Firebase Console](https://console.firebase.google.com/).
+2. Aktivera Authentication och Realtime Database.
+3. I Authentication, aktivera e-post/lösenord-inloggning.
+4. I Realtime Database, skapa en ny databas och starta i testläge eller konfigurera regler efter dina behov.
+5. Registrera en ny webbapp i ditt Firebase-projekt för att få de nödvändiga konfigurationsuppgifterna.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Licensiering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Detta projekt är licensierat under MIT-licensen - se LICENSE-filen för mer information.
