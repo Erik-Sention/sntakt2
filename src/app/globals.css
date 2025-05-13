@@ -3,8 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080b12;
+  --foreground: #f2f5f9;
+  --primary-glow: conic-gradient(
+    from 180deg at 50% 50%,
+    #192a69 0deg,
+    #2a4fe9 55deg,
+    #4e36c2 120deg,
+    #3a52ff 160deg,
+    transparent 360deg
+  );
+  --secondary-glow: radial-gradient(
+    rgba(51, 65, 119, 0.4),
+    rgba(65, 56, 158, 0.15)
+  );
 }
 
 @theme inline {
@@ -16,8 +28,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #080b12;
+    --foreground: #f2f5f9;
   }
 }
 
@@ -25,4 +37,34 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Lägg till animationer och high-tech effekter */
+@layer utilities {
+  .animate-glow {
+    animation: glow 4s ease-in-out infinite alternate;
+  }
+  
+  .bg-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 
+                 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3), 
+                0 0 20px rgba(59, 130, 246, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 
+                0 0 30px rgba(59, 130, 246, 0.3), 
+                0 0 40px rgba(59, 130, 246, 0.1);
+  }
 }
