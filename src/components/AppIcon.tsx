@@ -10,7 +10,7 @@ export default function AppIcon({ size = 32, className = '' }: AppIconProps) {
   return (
     <div className={`relative ${className}`} style={{ width: size, height: size }}>
       <Image
-        src="/sa-logo.svg"
+        src="/sention-logo.png"
         alt="Sention + Aktivitus"
         fill
         priority
