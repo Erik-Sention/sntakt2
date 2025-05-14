@@ -16,6 +16,7 @@ import { getClientLinks } from '@/lib/linkService';
 import { getClientNotes } from '@/lib/noteService';
 import { useAuth } from '@/context/AuthContext';
 import AppointmentEditButton from '@/components/clients/AppointmentEditButton';
+import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
   const [client, setClient] = useState<Client | null>(null);
@@ -176,6 +177,37 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <h3 className="text-sm font-medium text-gray-500">Namn</h3>
               <p className="mt-1 text-gray-900">{client.name}</p>
             </div>
+            {client.personnummer && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Personnummer</h3>
+                <p className="mt-1 text-gray-900">{client.personnummer}</p>
+              </div>
+            )}
+            {client.gatuadress && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Adress</h3>
+                <p className="mt-1 text-gray-900">
+                  {client.gatuadress}
+                  {client.postnummer && client.stad && (
+                    <>
+                      <br />
+                      {client.postnummer.length === 5 
+                        ? `${client.postnummer.substring(0, 3)} ${client.postnummer.substring(3, 5)}` 
+                        : client.postnummer} {client.stad}
+                    </>
+                  )}
+                  {client.postnummer && !client.stad && (
+                    <>
+                      <br />
+                      {client.postnummer.length === 5 
+                        ? `${client.postnummer.substring(0, 3)} ${client.postnummer.substring(3, 5)}` 
+                        : client.postnummer}
+                    </>
+                  )}
+                  {!client.postnummer && client.stad && <><br />{client.stad}</>}
+                </p>
+              </div>
+            )}
             <div>
               <h3 className="text-sm font-medium text-gray-500">Startdatum</h3>
               <p className="mt-1 text-gray-900">{formatDate(client.startDate)}</p>
@@ -477,32 +509,14 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setShowDeleteConfirm(false)}></div>
-          <div className="bg-white rounded-lg p-6 max-w-md w-full z-10 relative">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Ta bort klient</h3>
-            <p className="text-gray-600 mb-6">
-              Är du säker på att du vill ta bort klienten {client.name}? Denna åtgärd kan inte ångras.
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                type="button"
-                onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Avbryt
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-              >
-                {isDeleting ? 'Tar bort...' : 'Ta bort'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteConfirmationModal
+          title="Ta bort klient"
+          message={`Är du säker på att du vill ta bort klienten ${client.name}? Denna åtgärd kan inte ångras.`}
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+          isOpen={showDeleteConfirm}
+          requireAuth={true}
+        />
       )}
     </div>
   );

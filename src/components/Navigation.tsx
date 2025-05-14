@@ -36,10 +36,10 @@ export default function Navigation() {
               </Link>
             </div>
             <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
-              <div className="relative group">
+              <div className="relative group flex items-end h-16 pb-5">
                 <Link 
                   href="/dashboard" 
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
+                  className={`inline-flex items-center px-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                     isActive('/dashboard')
                       ? 'border-luxury-gold text-luxury-dark'
                       : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
@@ -54,10 +54,10 @@ export default function Navigation() {
                 </div>
               </div>
               
-              <div className="relative group">
+              <div className="relative group flex items-end h-16 pb-5">
                 <Link 
                   href="/clients" 
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
+                  className={`inline-flex items-center px-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                     isActive('/clients')
                       ? 'border-luxury-gold text-luxury-dark'
                       : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
@@ -72,10 +72,10 @@ export default function Navigation() {
                 </div>
               </div>
               
-              <div className="relative group">
+              <div className="relative group flex items-end h-16 pb-5">
                 <Link 
                   href="/calendar" 
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
+                  className={`inline-flex items-center px-1 border-b-2 text-sm font-medium transition-all duration-300 ${
                     isActive('/calendar')
                       ? 'border-luxury-gold text-luxury-dark'
                       : 'border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark'
@@ -87,6 +87,38 @@ export default function Navigation() {
                 </Link>
                 <div className="absolute left-1/2 -translate-x-1/2 -bottom-8 px-2 py-1 bg-luxury-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
                   Kalender
+                </div>
+              </div>
+              
+              <div className="relative group flex items-end h-16 pb-5">
+                <a 
+                  href="https://sention-lab.onrender.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex items-center px-1 border-b-2 text-sm font-medium border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark transition-all duration-300"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </a>
+                <div className="absolute left-1/2 -translate-x-1/2 -bottom-8 px-2 py-1 bg-luxury-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                  Tester
+                </div>
+              </div>
+              
+              <div className="relative group flex items-end h-16 pb-5">
+                <a 
+                  href="https://drive.google.com/drive/folders/1BA3x1-rr7ER7kNKJZt22UmQyg6J_FJlc?usp=drive_link" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex items-center px-1 border-b-2 text-sm font-medium border-transparent text-luxury-mid hover:border-luxury-rosegold/50 hover:text-luxury-dark transition-all duration-300"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </a>
+                <div className="absolute left-1/2 -translate-x-1/2 -bottom-8 px-2 py-1 bg-luxury-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                  Google Drive
                 </div>
               </div>
             </div>
@@ -205,6 +237,28 @@ export default function Navigation() {
               </svg>
               Kalender
             </Link>
+            <a
+              href="https://sention-lab.onrender.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center px-3 py-2 text-base font-medium border-l-2 border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+              Tester
+            </a>
+            <a
+              href="https://drive.google.com/drive/folders/1BA3x1-rr7ER7kNKJZt22UmQyg6J_FJlc?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center px-3 py-2 text-base font-medium border-l-2 border-transparent text-luxury-mid hover:bg-luxury-sand/10 hover:border-luxury-rosegold/50 hover:text-luxury-dark"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Google Drive
+            </a>
             <Link
               href="/profile"
               className={`flex items-center px-3 py-2 text-base font-medium border-l-2 ${

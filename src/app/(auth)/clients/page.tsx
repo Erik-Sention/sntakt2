@@ -34,6 +34,7 @@ export default function ClientsPage() {
   // Filterera klienter baserat på sökterm
   const filteredClients = clients.filter(client => 
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (client.personnummer && client.personnummer.toLowerCase().includes(searchTerm.toLowerCase())) ||
     client.comments.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

@@ -17,6 +17,10 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
   
   const [formData, setFormData] = useState({
     name: client?.name || '',
+    personnummer: client?.personnummer || '',
+    gatuadress: client?.gatuadress || '',
+    postnummer: client?.postnummer || '',
+    stad: client?.stad || '',
     startDate: client?.startDate || formatDate(new Date()),
     clinic: client?.clinic || '',
     nextDoctorAppointment: client?.nextDoctorAppointment || '',
@@ -47,7 +51,24 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (name === 'personnummer') {
+      // Formatera personnumret när användaren skriver
+      const digits = value.replace(/\D/g, '');
+      
+      if (digits.length <= 6) {
+        setFormData(prev => ({ ...prev, [name]: digits }));
+      } else {
+        const formattedValue = `${digits.substring(0, 6)}-${digits.substring(6, 10)}`;
+        setFormData(prev => ({ ...prev, [name]: formattedValue }));
+      }
+    } else if (name === 'postnummer') {
+      // Formatera postnummer till endast siffror och max 5 siffror
+      const digits = value.replace(/\D/g, '').substring(0, 5);
+      setFormData(prev => ({ ...prev, [name]: digits }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,6 +112,69 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
             value={formData.name}
             onChange={handleChange}
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="personnummer" className="block text-sm font-medium text-gray-700 mb-1">
+            Personnummer
+          </label>
+          <input
+            type="text"
+            id="personnummer"
+            name="personnummer"
+            value={formData.personnummer}
+            onChange={handleChange}
+            placeholder="YYMMDD-XXXX"
+            pattern="\d{6}-\d{4}"
+            title="Personnummer i formatet YYMMDD-XXXX"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p className="mt-1 text-xs text-gray-500">Format: ÅÅMMDD-XXXX</p>
+        </div>
+
+        <div>
+          <label htmlFor="gatuadress" className="block text-sm font-medium text-gray-700 mb-1">
+            Gatuadress
+          </label>
+          <input
+            type="text"
+            id="gatuadress"
+            name="gatuadress"
+            value={formData.gatuadress}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="postnummer" className="block text-sm font-medium text-gray-700 mb-1">
+            Postnummer
+          </label>
+          <input
+            type="text"
+            id="postnummer"
+            name="postnummer"
+            value={formData.postnummer}
+            onChange={handleChange}
+            placeholder="12345"
+            maxLength={5}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p className="mt-1 text-xs text-gray-500">Endast siffror, 5 tecken</p>
+        </div>
+
+        <div>
+          <label htmlFor="stad" className="block text-sm font-medium text-gray-700 mb-1">
+            Stad
+          </label>
+          <input
+            type="text"
+            id="stad"
+            name="stad"
+            value={formData.stad}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

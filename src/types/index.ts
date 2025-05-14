@@ -1,6 +1,10 @@
 export interface Client {
   id: string;
   name: string;
+  personnummer?: string;
+  gatuadress?: string;
+  postnummer?: string;
+  stad?: string;
   startDate: string;
   clinic?: string;
   nextDoctorAppointment: string;

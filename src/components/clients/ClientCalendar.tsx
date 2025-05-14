@@ -437,6 +437,7 @@ export default function ClientCalendar({
                     <Link 
                       href={`/clients/${appointment.client.id}`}
                       className="text-sm text-blue-600 hover:text-blue-800"
+                      scroll={false}
                     >
                       Visa klientprofil
                     </Link>
@@ -450,12 +451,10 @@ export default function ClientCalendar({
                       </p>
                     </div>
                   
-                    {appointment.client.clinic && (
-                      <div className="min-w-[200px]">
-                        <p className="text-sm font-medium text-gray-700">Klinik</p>
-                        <p className="text-sm text-gray-600">{appointment.client.clinic}</p>
-                      </div>
-                    )}
+                    <div className="min-w-[200px]">
+                      <p className="text-sm font-medium text-gray-700">Klinik</p>
+                      <p className="text-sm text-gray-600">{appointment.client.clinic || '—'}</p>
+                    </div>
                     
                     {appointment.person && (
                       <div className="min-w-[200px]">
