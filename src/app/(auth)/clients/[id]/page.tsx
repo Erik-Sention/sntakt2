@@ -195,26 +195,172 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
         <div className="p-6 border-b">
           <h2 className="text-lg font-semibold mb-4">Bokade tider</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nästa läkartid</h3>
-              <p className="mt-1 text-gray-900">{formatDate(client.nextDoctorAppointment)}</p>
+          <div className="space-y-6">
+            {client.clinic && (
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-1">Tillhör klinik</h3>
+                <p className="text-gray-900">{client.clinic}</p>
+              </div>
+            )}
+            
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-50 p-3">
+                <h3 className="text-md font-medium text-blue-800">Nästa läkartid</h3>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextDoctorAppointment)}</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {client.doctorName && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Läkare</h4>
+                    <p className="mt-1 text-gray-900">{client.doctorName}</p>
+                  </div>
+                )}
+                {client.doctorAppointmentDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Detaljer</h4>
+                    <p className="mt-1 text-gray-700 whitespace-pre-line">{client.doctorAppointmentDetails}</p>
+                  </div>
+                )}
+                <div>
+                  <button 
+                    onClick={() => router.push(`/calendar?date=${client.nextDoctorAppointment}`)} 
+                    className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Visa i kalender
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nästa korta kontakt</h3>
-              <p className="mt-1 text-gray-900">{formatDate(client.nextShortContact)}</p>
+
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-50 p-3">
+                <h3 className="text-md font-medium text-blue-800">Nästa korta kontakt</h3>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextShortContact)}</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {client.shortContactPerson && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Kontaktperson</h4>
+                    <p className="mt-1 text-gray-900">{client.shortContactPerson}</p>
+                  </div>
+                )}
+                {client.shortContactDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Detaljer</h4>
+                    <p className="mt-1 text-gray-700 whitespace-pre-line">{client.shortContactDetails}</p>
+                  </div>
+                )}
+                <div>
+                  <button 
+                    onClick={() => router.push(`/calendar?date=${client.nextShortContact}`)} 
+                    className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Visa i kalender
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nästa långa samtal</h3>
-              <p className="mt-1 text-gray-900">{formatDate(client.nextLongConversation)}</p>
+
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-50 p-3">
+                <h3 className="text-md font-medium text-blue-800">Nästa långa samtal</h3>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextLongConversation)}</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {client.longConversationPerson && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Samtalsperson</h4>
+                    <p className="mt-1 text-gray-900">{client.longConversationPerson}</p>
+                  </div>
+                )}
+                {client.longConversationDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Detaljer</h4>
+                    <p className="mt-1 text-gray-700 whitespace-pre-line">{client.longConversationDetails}</p>
+                  </div>
+                )}
+                <div>
+                  <button 
+                    onClick={() => router.push(`/calendar?date=${client.nextLongConversation}`)} 
+                    className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Visa i kalender
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nästa test</h3>
-              <p className="mt-1 text-gray-900">{formatDate(client.nextTest)}</p>
+
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-50 p-3">
+                <h3 className="text-md font-medium text-blue-800">Nästa test</h3>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextTest)}</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {client.testPerson && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Testansvarig</h4>
+                    <p className="mt-1 text-gray-900">{client.testPerson}</p>
+                  </div>
+                )}
+                {client.testDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Detaljer</h4>
+                    <p className="mt-1 text-gray-700 whitespace-pre-line">{client.testDetails}</p>
+                  </div>
+                )}
+                <div>
+                  <button 
+                    onClick={() => router.push(`/calendar?date=${client.nextTest}`)} 
+                    className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Visa i kalender
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Nästa möte + Rapport</h3>
-              <p className="mt-1 text-gray-900">{formatDate(client.nextMeeting)}</p>
+
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-50 p-3">
+                <h3 className="text-md font-medium text-blue-800">Nästa möte + Rapport</h3>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextMeeting)}</p>
+              </div>
+              <div className="p-4 space-y-3">
+                {client.meetingPersons && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Mötesdeltagare</h4>
+                    <p className="mt-1 text-gray-900">{client.meetingPersons}</p>
+                  </div>
+                )}
+                {client.meetingDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Detaljer</h4>
+                    <p className="mt-1 text-gray-700 whitespace-pre-line">{client.meetingDetails}</p>
+                  </div>
+                )}
+                <div>
+                  <button 
+                    onClick={() => router.push(`/calendar?date=${client.nextMeeting}`)} 
+                    className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Visa i kalender
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

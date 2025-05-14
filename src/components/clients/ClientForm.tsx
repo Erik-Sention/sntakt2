@@ -18,11 +18,22 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
   const [formData, setFormData] = useState({
     name: client?.name || '',
     startDate: client?.startDate || formatDate(new Date()),
+    clinic: client?.clinic || '',
     nextDoctorAppointment: client?.nextDoctorAppointment || '',
+    doctorName: client?.doctorName || '',
+    doctorAppointmentDetails: client?.doctorAppointmentDetails || '',
     nextShortContact: client?.nextShortContact || '',
+    shortContactPerson: client?.shortContactPerson || '',
+    shortContactDetails: client?.shortContactDetails || '',
     nextLongConversation: client?.nextLongConversation || '',
+    longConversationPerson: client?.longConversationPerson || '',
+    longConversationDetails: client?.longConversationDetails || '',
     nextTest: client?.nextTest || '',
+    testPerson: client?.testPerson || '',
+    testDetails: client?.testDetails || '',
     nextMeeting: client?.nextMeeting || '',
+    meetingPersons: client?.meetingPersons || '',
+    meetingDetails: client?.meetingDetails || '',
     comments: client?.comments || '',
     interventionStatus: client?.interventionStatus || 'Planned' as 'Planned' | 'Completed' | 'Canceled'
   });
@@ -100,6 +111,20 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
         </div>
 
         <div>
+          <label htmlFor="clinic" className="block text-sm font-medium text-gray-700 mb-1">
+            Klinik
+          </label>
+          <input
+            type="text"
+            id="clinic"
+            name="clinic"
+            value={formData.clinic}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
           <label htmlFor="nextDoctorAppointment" className="block text-sm font-medium text-gray-700 mb-1">
             Nästa läkartid
           </label>
@@ -109,6 +134,34 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
             name="nextDoctorAppointment"
             value={formData.nextDoctorAppointment}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="doctorName" className="block text-sm font-medium text-gray-700 mb-1">
+            Läkare
+          </label>
+          <input
+            type="text"
+            id="doctorName"
+            name="doctorName"
+            value={formData.doctorName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="doctorAppointmentDetails" className="block text-sm font-medium text-gray-700 mb-1">
+            Detaljer om läkarbesöket
+          </label>
+          <textarea
+            id="doctorAppointmentDetails"
+            name="doctorAppointmentDetails"
+            value={formData.doctorAppointmentDetails}
+            onChange={handleChange}
+            rows={2}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -128,6 +181,34 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
         </div>
 
         <div>
+          <label htmlFor="shortContactPerson" className="block text-sm font-medium text-gray-700 mb-1">
+            Kontaktperson
+          </label>
+          <input
+            type="text"
+            id="shortContactPerson"
+            name="shortContactPerson"
+            value={formData.shortContactPerson}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="shortContactDetails" className="block text-sm font-medium text-gray-700 mb-1">
+            Detaljer om korta kontakten
+          </label>
+          <textarea
+            id="shortContactDetails"
+            name="shortContactDetails"
+            value={formData.shortContactDetails}
+            onChange={handleChange}
+            rows={2}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
           <label htmlFor="nextLongConversation" className="block text-sm font-medium text-gray-700 mb-1">
             Nästa långa samtal
           </label>
@@ -137,6 +218,34 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
             name="nextLongConversation"
             value={formData.nextLongConversation}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="longConversationPerson" className="block text-sm font-medium text-gray-700 mb-1">
+            Samtalsperson
+          </label>
+          <input
+            type="text"
+            id="longConversationPerson"
+            name="longConversationPerson"
+            value={formData.longConversationPerson}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="longConversationDetails" className="block text-sm font-medium text-gray-700 mb-1">
+            Detaljer om långa samtalet
+          </label>
+          <textarea
+            id="longConversationDetails"
+            name="longConversationDetails"
+            value={formData.longConversationDetails}
+            onChange={handleChange}
+            rows={2}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -156,6 +265,34 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
         </div>
 
         <div>
+          <label htmlFor="testPerson" className="block text-sm font-medium text-gray-700 mb-1">
+            Testansvarig
+          </label>
+          <input
+            type="text"
+            id="testPerson"
+            name="testPerson"
+            value={formData.testPerson}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="testDetails" className="block text-sm font-medium text-gray-700 mb-1">
+            Detaljer om testet
+          </label>
+          <textarea
+            id="testDetails"
+            name="testDetails"
+            value={formData.testDetails}
+            onChange={handleChange}
+            rows={2}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
           <label htmlFor="nextMeeting" className="block text-sm font-medium text-gray-700 mb-1">
             Nästa möte + Rapport
           </label>
@@ -165,6 +302,34 @@ export default function ClientForm({ client, isEditing = false }: ClientFormProp
             name="nextMeeting"
             value={formData.nextMeeting}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="meetingPersons" className="block text-sm font-medium text-gray-700 mb-1">
+            Mötesdeltagare
+          </label>
+          <input
+            type="text"
+            id="meetingPersons"
+            name="meetingPersons"
+            value={formData.meetingPersons}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="meetingDetails" className="block text-sm font-medium text-gray-700 mb-1">
+            Detaljer om mötet
+          </label>
+          <textarea
+            id="meetingDetails"
+            name="meetingDetails"
+            value={formData.meetingDetails}
+            onChange={handleChange}
+            rows={2}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
