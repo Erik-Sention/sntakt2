@@ -15,6 +15,10 @@ export default function CalendarPage() {
   const dateParam = searchParams.get('date');
   const clientIdParam = searchParams.get('clientId');
   const appointmentTypeParam = searchParams.get('appointmentType');
+  const dayParam = searchParams.get('day');
+
+  // Konvertera day-parameter till ett nummer
+  const selectedDay = dayParam ? parseInt(dayParam, 10) : null;
 
   useEffect(() => {
     const loadClients = async () => {
@@ -90,6 +94,9 @@ export default function CalendarPage() {
             <ClientCalendar 
               clients={clients} 
               initialDate={getInitialDate()}
+              initialClientId={clientIdParam}
+              initialAppointmentType={appointmentTypeParam}
+              initialSelectedDay={selectedDay}
             />
           </div>
         )}

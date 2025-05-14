@@ -16,13 +16,24 @@ interface AppointmentInfo {
 interface ClientCalendarProps {
   clients: Client[];
   initialDate?: Date;
+  initialClientId?: string | null;
+  initialAppointmentType?: string | null;
+  initialSelectedDay?: number | null;
 }
 
-export default function ClientCalendar({ clients, initialDate }: ClientCalendarProps) {
+export default function ClientCalendar({ 
+  clients, 
+  initialDate,
+  initialClientId,
+  initialAppointmentType,
+  initialSelectedDay 
+}: ClientCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState<Date>(initialDate || new Date());
-  const [selectedDay, setSelectedDay] = useState<number | null>(initialDate ? initialDate.getDate() : null);
-  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
-  const [selectedAppointmentType, setSelectedAppointmentType] = useState<string | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number | null>(
+    initialSelectedDay !== undefined ? initialSelectedDay : (initialDate ? initialDate.getDate() : null)
+  );
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(initialClientId || null);
+  const [selectedAppointmentType, setSelectedAppointmentType] = useState<string | null>(initialAppointmentType || null);
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -30,9 +41,21 @@ export default function ClientCalendar({ clients, initialDate }: ClientCalendarP
   useEffect(() => {
     if (initialDate) {
       setCurrentMonth(new Date(initialDate.getFullYear(), initialDate.getMonth(), 1));
-      setSelectedDay(initialDate.getDate());
+      if (!initialSelectedDay) {
+        setSelectedDay(initialDate.getDate());
+      }
     }
-  }, [initialDate]);
+  }, [initialDate, initialSelectedDay]);
+
+  // Uppdatera när initialClientId eller initialAppointmentType ändras
+  useEffect(() => {
+    if (initialClientId) {
+      setSelectedClientId(initialClientId);
+    }
+    if (initialAppointmentType) {
+      setSelectedAppointmentType(initialAppointmentType);
+    }
+  }, [initialClientId, initialAppointmentType]);
 
   // Kontrollera URL-parametrar för initiala värden
   useEffect(() => {
@@ -233,11 +256,12 @@ export default function ClientCalendar({ clients, initialDate }: ClientCalendarP
   };
 
   // Hantera klick på klient
-  const handleClientClick = (e: React.MouseEvent, clientId: string, appointmentType: string) => {
+  const handleClientClick = (e: React.MouseEvent, day: number, clientId: string, appointmentType: string) => {
     e.stopPropagation(); // Förhindra att dag-klick händer samtidigt
+    setSelectedDay(day);
     setSelectedClientId(clientId);
     setSelectedAppointmentType(appointmentType);
-    updateUrl(selectedDay, clientId, appointmentType);
+    updateUrl(day, clientId, appointmentType);
   };
 
   // Hitta besöksdetaljer för vald klient
@@ -368,9 +392,11 @@ export default function ClientCalendar({ clients, initialDate }: ClientCalendarP
                   {clientsByDay[day]?.map((item, idx) => (
                     <div 
                       key={`${item.client.id}-${item.appointmentType}-${idx}`}
-                      onClick={(e) => handleClientClick(e, item.client.id, item.appointmentType)}
+                      onClick={(e) => handleClientClick(e, day, item.client.id, item.appointmentType)}
                       className={`flex items-center gap-2 text-xs p-1 rounded ${
-                        selectedClientId === item.client.id && selectedAppointmentType === item.appointmentType
+                        selectedClientId === item.client.id && 
+                        selectedAppointmentType === item.appointmentType &&
+                        selectedDay === day
                           ? 'bg-blue-200 text-blue-800' 
                           : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
                       } truncate`}
@@ -470,11 +496,7 @@ export default function ClientCalendar({ clients, initialDate }: ClientCalendarP
               {getClientAppointments(selectedDay).map((item, index) => (
                 <div 
                   key={index}
-                  onClick={() => {
-                    setSelectedClientId(item.client.id);
-                    setSelectedAppointmentType(item.appointmentType);
-                    updateUrl(selectedDay, item.client.id, item.appointmentType);
-                  }}
+                  onClick={(e) => handleClientClick(e, selectedDay, item.client.id, item.appointmentType)}
                   className="p-3 bg-white rounded-lg shadow-sm hover:bg-blue-50 cursor-pointer"
                 >
                   <div className="flex justify-between items-center">
