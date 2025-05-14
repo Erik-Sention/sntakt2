@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getClient, deleteClient } from '@/lib/clientService';
 import { Client, ClientDocument, ClientLink, ClientNote } from '@/types';
@@ -15,6 +15,7 @@ import { getClientDocuments } from '@/lib/documentService';
 import { getClientLinks } from '@/lib/linkService';
 import { getClientNotes } from '@/lib/noteService';
 import { useAuth } from '@/context/AuthContext';
+import AppointmentEditButton from '@/components/clients/AppointmentEditButton';
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
   const [client, setClient] = useState<Client | null>(null);
@@ -32,37 +33,38 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   const { id } = params;
   const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchClientData = async () => {
-      try {
-        const clientData = await getClient(id);
-        if (clientData) {
-          setClient(clientData);
-          
-          // Hämta dokument
-          const clientDocuments = await getClientDocuments(id);
-          setDocuments(clientDocuments);
-          
-          // Hämta länkar
-          const clientLinks = await getClientLinks(id);
-          setLinks(clientLinks);
-          
-          // Hämta notat
-          const clientNotes = await getClientNotes(id);
-          setNotes(clientNotes);
-        } else {
-          setError('Klienten kunde inte hittas');
-        }
-      } catch (err) {
-        console.error('Fel vid hämtning av klient:', err);
-        setError('Kunde inte hämta klientens information');
-      } finally {
-        setLoading(false);
+  const fetchClientData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const clientData = await getClient(id);
+      if (clientData) {
+        setClient(clientData);
+        
+        // Hämta dokument
+        const clientDocuments = await getClientDocuments(id);
+        setDocuments(clientDocuments);
+        
+        // Hämta länkar
+        const clientLinks = await getClientLinks(id);
+        setLinks(clientLinks);
+        
+        // Hämta notat
+        const clientNotes = await getClientNotes(id);
+        setNotes(clientNotes);
+      } else {
+        setError('Klienten kunde inte hittas');
       }
-    };
-
-    fetchClientData();
+    } catch (err) {
+      console.error('Fel vid hämtning av klient:', err);
+      setError('Kunde inte hämta klientens information');
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchClientData();
+  }, [id, fetchClientData]);
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -204,9 +206,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             )}
             
             <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-50 p-3">
-                <h3 className="text-md font-medium text-blue-800">Nästa läkartid</h3>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextDoctorAppointment)}</p>
+              <div className="bg-blue-50 p-3 flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-blue-800">Nästa läkartid</h3>
+                  <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextDoctorAppointment)}</p>
+                </div>
+                <AppointmentEditButton 
+                  client={client} 
+                  appointmentType="doctor" 
+                  onUpdate={() => fetchClientData()}
+                />
               </div>
               <div className="p-4 space-y-3">
                 {client.doctorName && (
@@ -223,7 +232,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 )}
                 <div>
                   <button 
-                    onClick={() => router.push(`/calendar?date=${client.nextDoctorAppointment}`)} 
+                    onClick={() => router.push(`/calendar?date=${client.nextDoctorAppointment}&clientId=${client.id}&appointmentType=Läkartid`)} 
                     className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -236,9 +245,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </div>
 
             <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-50 p-3">
-                <h3 className="text-md font-medium text-blue-800">Nästa korta kontakt</h3>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextShortContact)}</p>
+              <div className="bg-blue-50 p-3 flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-blue-800">Nästa korta kontakt</h3>
+                  <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextShortContact)}</p>
+                </div>
+                <AppointmentEditButton 
+                  client={client} 
+                  appointmentType="shortContact" 
+                  onUpdate={() => fetchClientData()}
+                />
               </div>
               <div className="p-4 space-y-3">
                 {client.shortContactPerson && (
@@ -255,7 +271,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 )}
                 <div>
                   <button 
-                    onClick={() => router.push(`/calendar?date=${client.nextShortContact}`)} 
+                    onClick={() => router.push(`/calendar?date=${client.nextShortContact}&clientId=${client.id}&appointmentType=Kort kontakt`)} 
                     className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -268,9 +284,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </div>
 
             <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-50 p-3">
-                <h3 className="text-md font-medium text-blue-800">Nästa långa samtal</h3>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextLongConversation)}</p>
+              <div className="bg-blue-50 p-3 flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-blue-800">Nästa långa samtal</h3>
+                  <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextLongConversation)}</p>
+                </div>
+                <AppointmentEditButton 
+                  client={client} 
+                  appointmentType="longConversation" 
+                  onUpdate={() => fetchClientData()}
+                />
               </div>
               <div className="p-4 space-y-3">
                 {client.longConversationPerson && (
@@ -287,7 +310,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 )}
                 <div>
                   <button 
-                    onClick={() => router.push(`/calendar?date=${client.nextLongConversation}`)} 
+                    onClick={() => router.push(`/calendar?date=${client.nextLongConversation}&clientId=${client.id}&appointmentType=Långt samtal`)} 
                     className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -300,9 +323,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </div>
 
             <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-50 p-3">
-                <h3 className="text-md font-medium text-blue-800">Nästa test</h3>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextTest)}</p>
+              <div className="bg-blue-50 p-3 flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-blue-800">Nästa test</h3>
+                  <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextTest)}</p>
+                </div>
+                <AppointmentEditButton 
+                  client={client} 
+                  appointmentType="test" 
+                  onUpdate={() => fetchClientData()}
+                />
               </div>
               <div className="p-4 space-y-3">
                 {client.testPerson && (
@@ -319,7 +349,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 )}
                 <div>
                   <button 
-                    onClick={() => router.push(`/calendar?date=${client.nextTest}`)} 
+                    onClick={() => router.push(`/calendar?date=${client.nextTest}&clientId=${client.id}&appointmentType=Test`)} 
                     className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -332,9 +362,16 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
             </div>
 
             <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-50 p-3">
-                <h3 className="text-md font-medium text-blue-800">Nästa möte + Rapport</h3>
-                <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextMeeting)}</p>
+              <div className="bg-blue-50 p-3 flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-blue-800">Nästa möte + Rapport</h3>
+                  <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(client.nextMeeting)}</p>
+                </div>
+                <AppointmentEditButton 
+                  client={client} 
+                  appointmentType="meeting" 
+                  onUpdate={() => fetchClientData()}
+                />
               </div>
               <div className="p-4 space-y-3">
                 {client.meetingPersons && (
@@ -351,7 +388,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 )}
                 <div>
                   <button 
-                    onClick={() => router.push(`/calendar?date=${client.nextMeeting}`)} 
+                    onClick={() => router.push(`/calendar?date=${client.nextMeeting}&clientId=${client.id}&appointmentType=Möte + Rapport`)} 
                     className="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

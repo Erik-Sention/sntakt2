@@ -13,6 +13,8 @@ export default function CalendarPage() {
   const [view, setView] = useState<'month' | 'week'>('month');
   const searchParams = useSearchParams();
   const dateParam = searchParams.get('date');
+  const clientIdParam = searchParams.get('clientId');
+  const appointmentTypeParam = searchParams.get('appointmentType');
 
   useEffect(() => {
     const loadClients = async () => {
@@ -85,7 +87,10 @@ export default function CalendarPage() {
           </div>
         ) : (
           <div className="calendar-container">
-            <ClientCalendar clients={clients} initialDate={getInitialDate()} />
+            <ClientCalendar 
+              clients={clients} 
+              initialDate={getInitialDate()}
+            />
           </div>
         )}
       </div>
